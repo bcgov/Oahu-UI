@@ -7,13 +7,28 @@
     {
       "name": "deviceId",
       "display_name": "Device ID",
-      "type": "number",
-      "default_value": 1
+      "type": "number"
+    },
+    {
+      "name": "sensor",
+      "display_name": "Sensor Name",
+      "type": "text"
     },
     {
       "name": "seeEvents",
-      "display_name": "Do you want to see the devices events?",
+      "display_name": "See Events",
       "type": "boolean"
+    },
+    {
+      "name": "latestEvents",
+      "display_name": "See Latest Event",
+      "type": "boolean"
+    },
+    {
+      "name": "host",
+      "display_name": "Host name",
+      "type": "text",
+      "default_value": "https://oahu-api-tran-iot-dev.pathfinder.gov.bc.ca"
     },
     {
       "name"         : "refresh_time",
@@ -34,11 +49,22 @@
     var currentSettings = settings;
 
     function getData() {
-      var data;
-      var url = "http://localhost:5000/api/devices/";
-      url += currentSettings.deviceId;
-      if(currentSettings.seeEvents) {
-        url += "/events/";
+      var url = currentSettings.host + "/api/devices/";
+
+      if(currentSettings.deviceId) {
+        url += currentSettings.deviceId;
+
+        if(currentSettings.sensor) {
+          url += '/' + currentSettings.sensor;
+        }
+
+        if(currentSettings.seeEvents) {
+          url += "/events";
+        }
+
+        if(currentSettings.latestEvents) {
+          url += "/latest/";
+        }
       }
 
       $.ajax({
